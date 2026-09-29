@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "416045151692",
+    "firebase_url": "https://recomendacao-filmes-b3326-default-rtdb.firebaseio.com",
+    "project_id": "recomendacao-filmes-b3326",
+    "storage_bucket": "recomendacao-filmes-b3326.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416045151692:android:e002f5a74d934e33141969",
+        "android_client_info": {
+          "package_name": "com.example.recomendacao_filme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTRN30eIO1y13Of54jVXn93iWYg4adE4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

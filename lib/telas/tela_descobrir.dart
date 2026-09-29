@@ -1,0 +1,94 @@
+import 'package:recomendacao_filme/model/filme.dart';
+import 'package:recomendacao_filme/service/tmdb_service.dart';
+import 'package:recomendacao_filme/telas/tela_detalhes_filme.dart';
+import 'package:recomendacao_filme/widgets/filme_widgets.dart';
+import 'package:flutter/material.dart';
+
+class TelaDescobrir extends StatefulWidget {
+  const TelaDescobrir({super.key});
+
+  @override
+  State<TelaDescobrir> createState() => _TelaDescobrirState();
+}
+
+class _TelaDescobrirState extends State<TelaDescobrir> {
+  final _tmdb = TmdbService();
+  final _buscaController = TextEditingController();
+
+  List<Filme> _filmes = [];
+  bool _ocupado = false;
+  String? _erro;
+
+  @override
+  void initState() {
+    super.initState();
+    _carregar();
+  }
+
+  @override
+  void dispose() {
+    _buscaController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _carregar() async {
+    final termo = _buscaController.text.trim();
+    setState(() {
+      _ocupado = true;
+      _erro = null;
+    });
+    try {
+      final filmes = termo.isEmpty ? await _tmdb.populares() : await _tmdb.buscar(termo);
+      if (mounted) setState(() => _filmes = filmes);
+    } catch (e) {
+      if (mounted) setState(() => _erro = 'Não foi possível carregar os filmes.\n$e');
+    } finally {
+      if (mounted) setState(() => _ocupado = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+          child: TextField(
+            controller: _buscaController,
+            textInputAction: TextInputAction.search,
+            onSubmitted: (_) => _carregar(),
+            decoration: InputDecoration(
+              hintText: 'Buscar filme...',
+              prefixIcon: const Icon(Icons.search),
+              border: const OutlineInputBorder(),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  _buscaController.clear();
+                  _carregar();
+                },
+              ),
+            ),
+          ),
+        ),
+        if (_ocupado) const LinearProgressIndicator(),
+        if (_erro != null)
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(_erro!, style: const TextStyle(color: Colors.red)),
+          ),
+        if (!_ocupado && _erro == null && _filmes.isEmpty)
+          const Padding(padding: EdgeInsets.all(16), child: Text('Nenhum filme encontrado')),
+        Expanded(
+          child: GradeFilmes(
+            filmes: _filmes,
+            aoTocar: (f) => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => TelaDetalhesFilme(filmeId: f.id)),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

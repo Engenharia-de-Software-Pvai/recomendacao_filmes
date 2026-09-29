@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "recomendacao_filme",
+      "request": "launch",
+      "type": "dart",
+      "toolArgs": ["--dart-define=TMDB_API_KEY=824bbd6665f5db5351500650077ad33e"]
+    }
+  ]
+}
