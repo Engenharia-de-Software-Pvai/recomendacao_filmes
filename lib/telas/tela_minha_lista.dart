@@ -52,10 +52,10 @@ class _TelaMinhaListaState extends State<TelaMinhaLista> {
               style: TextStyle(color: cores.onSurface),
               ),
               subtitle: Text(f.nota == null ? 'Sem nota' : '★' * f.nota!,
-              style: TextStyle(color: cores.onSurfaceVariant),
+              style: TextStyle(color: cores.secondary),
               ),
               trailing: f.favorito
-                  ? Icon(Icons.favorite, color: cores.secondary)
+                  ? Icon(Icons.favorite, color: cores.tertiary)
                   : null,
               onTap: () => Navigator.push(
                 context,

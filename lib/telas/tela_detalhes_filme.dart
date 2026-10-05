@@ -8,7 +8,6 @@ import 'package:recomendacao_filme/style/colorScheme.dart' as custom_colors;
 
 class TelaDetalhesFilme extends StatefulWidget {
   final int filmeId;
-  
 
   const TelaDetalhesFilme({super.key, required this.filmeId});
 
@@ -94,10 +93,23 @@ class _TelaDetalhesFilmeState extends State<TelaDetalhesFilme> {
     return Scaffold(
       backgroundColor: cores.surface,
       appBar: AppBar(
-        backgroundColor: cores.primary,
+        title: Text(filme?.titulo ?? 'Filme'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         foregroundColor: cores.onPrimary,
-        title: Text(filme?.titulo ?? 'Filme'
-        )),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+              cores.tertiary,
+          cores.primary, 
+              ],
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: AbsorbPointer(
           absorbing: _ocupado,
@@ -122,89 +134,112 @@ class _TelaDetalhesFilmeState extends State<TelaDetalhesFilme> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(filme.titulo, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: cores.primary)),
-                        Text('${filme.ano} · TMDB ${filme.notaMedia.toStringAsFixed(1)}', style: TextStyle(color: cores.onSurfaceVariant)),
+                        Text(
+                          filme.titulo,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: cores.primary,
+                          ),
+                        ),
+                        Text(
+                          '${filme.ano} · TMDB ${filme.notaMedia.toStringAsFixed(1)}',
+                          style: TextStyle(color: cores.secondary),
+                        ),
                         const SizedBox(height: 12),
-                        Text(filme.sinopse.isEmpty ? 'Sem sinopse disponível.' : filme.sinopse, style: TextStyle(color: cores.onSurface)),
+                        Text(
+                          filme.sinopse.isEmpty
+                              ? 'Sem sinopse disponível.'
+                              : filme.sinopse,
+                          style: TextStyle(color: cores.onSurface),
+                        ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
-Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 14.0), 
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        'Sua avaliação',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: cores.primary,
-        ),
-      ),
-      const SizedBox(height: 8),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Sua avaliação',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: cores.tertiary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
 
-      // Linha das Estrelas
-      Row(
-        children: [
-          for (var n = 1; n <= 5; n++)
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0), // Espaço entre as estrelas
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                visualDensity: VisualDensity.compact,
-                onPressed: () => _salvar(nota: n),
-                icon: Icon(
-                  (_usuario?.nota ?? 0) >= n ? Icons.star : Icons.star_border,
-                  color: cores.secondary,
-                  size: 28,
+                      // Linha das Estrelas
+                      Row(
+                        children: [
+                          for (var n = 1; n <= 5; n++)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                visualDensity: VisualDensity.compact,
+                                onPressed: () => _salvar(nota: n),
+                                icon: Icon(
+                                  (_usuario?.nota ?? 0) >= n
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: cores.secondary,
+                                  size: 28,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Botões
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          FilledButton.tonalIcon(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: cores.primary,
+                              foregroundColor: cores.onPrimary,
+                            ),
+                            onPressed: () =>
+                                _salvar(favorito: !(_usuario?.favorito ?? false)),
+                            icon: Icon(
+                              (_usuario?.favorito ?? false)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                            ),
+                            label: Text(
+                              (_usuario?.favorito ?? false)
+                                  ? 'Favoritado'
+                                  : 'Favoritar',
+                            ),
+                          ),
+                          if (_usuario != null)
+                            TextButton(
+                              onPressed: _remover,
+                              child: Text(
+                                'Remover da lista',
+                                style: TextStyle(color: cores.onSurfaceVariant),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-        ],
-      ),
-
-      const SizedBox(height: 12),
-
-      // Botões
-      Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          FilledButton.tonalIcon(
-            style: FilledButton.styleFrom(
-              backgroundColor: cores.primary,
-              foregroundColor: cores.onPrimary,
-            ),
-            onPressed: () => _salvar(favorito: !(_usuario?.favorito ?? false)),
-            icon: Icon(
-              (_usuario?.favorito ?? false)
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-            ),
-            label: Text(
-              (_usuario?.favorito ?? false) ? 'Favoritado' : 'Favoritar',
-            ),
-          ),
-          if (_usuario != null)
-            TextButton(
-              onPressed: _remover,
-              child: Text(
-                'Remover da lista',
-                style: TextStyle(color: cores.onSurfaceVariant),
-              ),
-            ),
-        ],
-      ),
-    ],
-  ),
-),
               ] else if (!_ocupado && _erro != null)
-                OutlinedButton(onPressed: _carregar, child: const Text('Tentar novamente')),
+                OutlinedButton(
+                  onPressed: _carregar,
+                  child: const Text('Tentar novamente'),
+                ),
             ],
           ),
         ),

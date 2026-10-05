@@ -59,11 +59,12 @@ class _TelaRecomendacoesState extends State<TelaRecomendacoes> {
                   _personalizada
                       ? 'Baseado nos filmes que você favoritou e avaliou bem'
                       : 'Avalie ou favorite filmes para receber recomendações personalizadas. Por enquanto, os mais populares:',
+                style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
                 ),
               ),
               IconButton(
                 tooltip: 'Atualizar',
-                icon: const Icon(Icons.refresh),
+                icon: Icon(Icons.refresh, color: Theme.of(context).colorScheme.secondary),
                 onPressed: _ocupado ? null : _carregar,
               ),
             ],

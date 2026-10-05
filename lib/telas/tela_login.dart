@@ -66,8 +66,8 @@ Widget build(BuildContext context) {
           begin: Alignment.topCenter, // Início do degradê
           end: Alignment.bottomCenter, // Fim do degradê
           colors: [
-            cores.primary, // Cor primária
-            cores.secondary, // Cor secundária
+            cores.primary, 
+            cores.tertiary,
           ],
         ),
       ),
@@ -124,7 +124,7 @@ Widget build(BuildContext context) {
                         onPressed: _ocupado ? null : _enviar,
                         child: Text(_cadastro ? 'Criar conta' : 'Entrar'),
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(cores.primary),
+                          backgroundColor: MaterialStateProperty.all(cores.tertiary),
                           foregroundColor: MaterialStateProperty.all(cores.onPrimary),
                         ),
                       ),
@@ -139,7 +139,7 @@ Widget build(BuildContext context) {
                           _cadastro
                               ? 'Já tenho conta'
                               : 'Não tenho conta, quero me cadastrar',
-                              style: TextStyle(color: cores.onSurfaceVariant),
+                              style: TextStyle(color: cores.secondary),
                         ),
                       ),
                     ],

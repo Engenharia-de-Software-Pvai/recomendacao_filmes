@@ -60,19 +60,18 @@ class _TelaDescobrirState extends State<TelaDescobrir> {
   controller: _buscaController,
   textInputAction: TextInputAction.search,
   onSubmitted: (_) => _carregar(),
-  style: TextStyle(color: cores.onSurface), // Cor do texto quando digita
+  style: TextStyle(color: cores.onSurface), 
   decoration: InputDecoration(
     hintText: 'Buscar filme...',
-    hintStyle: TextStyle(color: cores.onSurfaceVariant), // Cor do texto "Buscar filme..."
+    hintStyle: TextStyle(color: cores.tertiary),
     
-    // 1. Cor de Fundo Interna
     filled: true,
-    fillColor: cores.surfaceContainer, // Altere para a cor que desejar (ex: Colors.white)
+    fillColor: cores.surfaceContainer, 
     
-    // 2. Cor dos Ícones
-    prefixIcon: Icon(Icons.search, color: cores.onSurfaceVariant),
+    
+    prefixIcon: Icon(Icons.search, color: cores.tertiary),
     suffixIcon: IconButton(
-      icon: Icon(Icons.clear, color: cores.onSurfaceVariant),
+      icon: Icon(Icons.clear, color: cores.tertiary),
       onPressed: () {
         _buscaController.clear();
         _carregar();

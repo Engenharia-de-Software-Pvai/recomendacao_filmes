@@ -37,42 +37,70 @@ class _TelaHomeState extends State<TelaHome> {
     return Scaffold(
       backgroundColor: cores.surface,
       appBar: AppBar(
-        title: Text(_titulos[_indice]),
-        backgroundColor: cores.primary,
-        foregroundColor: cores.onPrimary,
-        actions: [
-          IconButton(
-            tooltip: 'Sair',
-            icon: Icon(Icons.logout, color: cores.onSecondary),
-            onPressed: () => AuthService().sair(),
-          ),
+  title: Text(_titulos[_indice]),
+  backgroundColor: Colors.transparent, // Torna o fundo padrão transparente
+  elevation: 0, // Opcional: remove a sombra
+  foregroundColor: cores.onPrimary,
+  flexibleSpace: Container(
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          cores.tertiary,
+          cores.primary, 
         ],
       ),
-      body: _corpo(),
-      bottomNavigationBar: NavigationBarTheme(
-  data: NavigationBarThemeData(
-    labelTextStyle: WidgetStateProperty.all(
-      TextStyle(color: cores.onPrimary),
     ),
-    backgroundColor: cores.primary,
   ),
-  child: NavigationBar(
-    selectedIndex: _indice,
-    onDestinationSelected: (i) => setState(() => _indice = i),
-    destinations: [
-      NavigationDestination(
-        icon: Icon(Icons.explore, color: cores.onPrimary),
-        label: 'Descobrir',
+  actions: [
+    IconButton(
+      tooltip: 'Sair',
+      icon: Icon(Icons.logout, color: cores.onSecondary),
+      onPressed: () => AuthService().sair(),
+    ),
+  ],
+),
+      body: _corpo(),
+      bottomNavigationBar: Container(
+  decoration: BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        cores.tertiary,
+          cores.primary, 
+      ],
+    ),
+  ),
+  child: NavigationBarTheme(
+    data: NavigationBarThemeData(
+      labelTextStyle: WidgetStateProperty.all(
+        TextStyle(color: cores.onPrimary),
       ),
-      NavigationDestination(
-        icon: Icon(Icons.auto_awesome, color: cores.onPrimary),
-        label: 'Para você',
-      ),
-      NavigationDestination(
-        icon: Icon(Icons.bookmark, color: cores.onPrimary),
-        label: 'Minha lista',
-      ),
-    ],
+      // Torna o fundo do tema transparente para o Container aparecer
+      backgroundColor: Colors.transparent,
+    ),
+    child: NavigationBar(
+      backgroundColor: Colors.transparent, // Fundo transparente
+      indicatorColor: cores.surface.withValues(alpha: 0.3), // Opcional: cor do balão de seleção
+      selectedIndex: _indice,
+      onDestinationSelected: (i) => setState(() => _indice = i),
+      destinations: [
+        NavigationDestination(
+          icon: Icon(Icons.explore, color: cores.onPrimary),
+          label: 'Descobrir',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.auto_awesome, color: cores.onPrimary),
+          label: 'Para você',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.bookmark, color: cores.onPrimary),
+          label: 'Minha lista',
+        ),
+      ],
+    ),
   ),
 ),
     );

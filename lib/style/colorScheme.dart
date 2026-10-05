@@ -12,4 +12,5 @@ final colorScheme = ColorScheme(
   surfaceContainer: const Color(0xFFf3f3ff), //cor de fundo de componentes
   onSurface: const Color.fromARGB(255, 54, 42, 92), //textos
   onSurfaceVariant: const Color(0xFF65628e), //textos secundários
+  tertiary: const Color(0xFF6d43c0), //cor de destaque
 );
