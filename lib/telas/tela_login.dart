@@ -1,6 +1,7 @@
 import 'package:recomendacao_filme/service/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:recomendacao_filme/style/colorScheme.dart' as custom_colors;
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({super.key});
@@ -10,6 +11,8 @@ class TelaLogin extends StatefulWidget {
 }
 
 class _TelaLoginState extends State<TelaLogin> {
+  final cores = custom_colors.colorScheme;
+
   final _form = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
@@ -54,65 +57,101 @@ class _TelaLoginState extends State<TelaLogin> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Form(
-                key: _form,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.movie_filter, size: 72),
-                    const SizedBox(height: 8),
-                    Text('Recomenda Filmes',
-                        style: Theme.of(context).textTheme.headlineSmall),
-                    const SizedBox(height: 24),
-                    TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(labelText: 'E-mail'),
-                      validator: _obrigatorio,
-                    ),
-                    TextFormField(
-                      controller: _senhaController,
-                      obscureText: true,
-                      decoration: const InputDecoration(labelText: 'Senha'),
-                      validator: _obrigatorio,
-                    ),
-                    const SizedBox(height: 16),
-                    if (_erro != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Text(_erro!, style: const TextStyle(color: Colors.red)),
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.transparent,
+    body: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter, // Início do degradê
+          end: Alignment.bottomCenter, // Fim do degradê
+          colors: [
+            cores.primary, // Cor primária
+            cores.secondary, // Cor secundária
+          ],
+        ),
+      ),
+    child: SafeArea(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Card(
+              color: cores.surfaceContainer,
+              elevation: 4, // Define a sombra do Card
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16), // Bordas arredondadas
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24.0), // Espaçamento interno do Card
+                child: Form(
+                  key: _form,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.movie_filter, size: 72, color: cores.primary),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Recomenda Filmes',
+                        style: TextStyle(color: cores.onSurface, fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                    if (_ocupado) const LinearProgressIndicator(),
-                    FilledButton(
-                      onPressed: _ocupado ? null : _enviar,
-                      child: Text(_cadastro ? 'Criar conta' : 'Entrar'),
-                    ),
-                    TextButton(
-                      onPressed: _ocupado
-                          ? null
-                          : () => setState(() {
-                                _cadastro = !_cadastro;
-                                _erro = null;
-                              }),
-                      child: Text(_cadastro
-                          ? 'Já tenho conta'
-                          : 'Não tenho conta, quero me cadastrar'),
-                    ),
-                  ],
+                      const SizedBox(height: 24),
+                      TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(labelText: 'E-mail', labelStyle: TextStyle(color: cores.onSurfaceVariant)),
+                        validator: _obrigatorio,
+                      ),
+                      TextFormField(
+                        controller: _senhaController,
+                        obscureText: true,
+                        decoration: InputDecoration(labelText: 'Senha', labelStyle: TextStyle(color: cores.onSurfaceVariant)),
+                        validator: _obrigatorio,
+                      ),
+                      const SizedBox(height: 16),
+                      if (_erro != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            _erro!,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      if (_ocupado) const LinearProgressIndicator(),
+                      const SizedBox(height: 8),
+                      FilledButton(
+                        onPressed: _ocupado ? null : _enviar,
+                        child: Text(_cadastro ? 'Criar conta' : 'Entrar'),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(cores.primary),
+                          foregroundColor: MaterialStateProperty.all(cores.onPrimary),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _ocupado
+                            ? null
+                            : () => setState(() {
+                                  _cadastro = !_cadastro;
+                                  _erro = null;
+                                }),
+                        child: Text(
+                          _cadastro
+                              ? 'Já tenho conta'
+                              : 'Não tenho conta, quero me cadastrar',
+                              style: TextStyle(color: cores.onSurfaceVariant),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+    ),
+  );
+}
 }

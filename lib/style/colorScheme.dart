@@ -10,6 +10,6 @@ final colorScheme = ColorScheme(
   onError: Colors.white, //elementos em cima do erro
   surface: const Color(0xFFd2d3e7), //cor de fundo
   surfaceContainer: const Color(0xFFf3f3ff), //cor de fundo de componentes
-  onSurface: const Color(0xFF2a2638), //textos
+  onSurface: const Color.fromARGB(255, 55, 49, 74), //textos
   onSurfaceVariant: const Color(0xFF65628e), //textos secundários
 );
