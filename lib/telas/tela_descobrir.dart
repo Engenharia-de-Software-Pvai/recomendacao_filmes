@@ -3,6 +3,7 @@ import 'package:recomendacao_filme/service/tmdb_service.dart';
 import 'package:recomendacao_filme/telas/tela_detalhes_filme.dart';
 import 'package:recomendacao_filme/widgets/filme_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:recomendacao_filme/style/colorScheme.dart' as custom_colors;
 
 class TelaDescobrir extends StatefulWidget {
   const TelaDescobrir({super.key});
@@ -12,6 +13,8 @@ class TelaDescobrir extends StatefulWidget {
 }
 
 class _TelaDescobrirState extends State<TelaDescobrir> {
+  final cores = custom_colors.colorScheme;
+
   final _tmdb = TmdbService();
   final _buscaController = TextEditingController();
 
@@ -54,22 +57,40 @@ class _TelaDescobrirState extends State<TelaDescobrir> {
         Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
           child: TextField(
-            controller: _buscaController,
-            textInputAction: TextInputAction.search,
-            onSubmitted: (_) => _carregar(),
-            decoration: InputDecoration(
-              hintText: 'Buscar filme...',
-              prefixIcon: const Icon(Icons.search),
-              border: const OutlineInputBorder(),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  _buscaController.clear();
-                  _carregar();
-                },
-              ),
-            ),
-          ),
+  controller: _buscaController,
+  textInputAction: TextInputAction.search,
+  onSubmitted: (_) => _carregar(),
+  style: TextStyle(color: cores.onSurface), // Cor do texto quando digita
+  decoration: InputDecoration(
+    hintText: 'Buscar filme...',
+    hintStyle: TextStyle(color: cores.onSurfaceVariant), // Cor do texto "Buscar filme..."
+    
+    // 1. Cor de Fundo Interna
+    filled: true,
+    fillColor: cores.surfaceContainer, // Altere para a cor que desejar (ex: Colors.white)
+    
+    // 2. Cor dos Ícones
+    prefixIcon: Icon(Icons.search, color: cores.onSurfaceVariant),
+    suffixIcon: IconButton(
+      icon: Icon(Icons.clear, color: cores.onSurfaceVariant),
+      onPressed: () {
+        _buscaController.clear();
+        _carregar();
+      },
+    ),
+    
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: cores.surfaceContainer),
+    ),
+    
+    // 4. Cor da Borda ao Clicar/Focar
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: cores.primary, width: 2),
+    ),
+  ),
+)
         ),
         if (_ocupado) const LinearProgressIndicator(),
         if (_erro != null)
