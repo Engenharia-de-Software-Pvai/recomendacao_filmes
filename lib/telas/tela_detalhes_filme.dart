@@ -4,9 +4,11 @@ import 'package:recomendacao_filme/service/filme_usuario_service.dart';
 import 'package:recomendacao_filme/service/tmdb_service.dart';
 import 'package:recomendacao_filme/widgets/filme_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:recomendacao_filme/style/colorScheme.dart' as custom_colors;
 
 class TelaDetalhesFilme extends StatefulWidget {
   final int filmeId;
+  
 
   const TelaDetalhesFilme({super.key, required this.filmeId});
 
@@ -87,9 +89,15 @@ class _TelaDetalhesFilmeState extends State<TelaDetalhesFilme> {
 
   @override
   Widget build(BuildContext context) {
+    final cores = custom_colors.colorScheme;
     final filme = _filme;
     return Scaffold(
-      appBar: AppBar(title: Text(filme?.titulo ?? 'Filme')),
+      backgroundColor: cores.surface,
+      appBar: AppBar(
+        backgroundColor: cores.primary,
+        foregroundColor: cores.onPrimary,
+        title: Text(filme?.titulo ?? 'Filme'
+        )),
       body: SafeArea(
         child: AbsorbPointer(
           absorbing: _ocupado,
@@ -107,40 +115,94 @@ class _TelaDetalhesFilmeState extends State<TelaDetalhesFilme> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(filme.titulo, style: Theme.of(context).textTheme.headlineSmall),
-                Text('${filme.ano} · TMDB ${filme.notaMedia.toStringAsFixed(1)}'),
-                const SizedBox(height: 12),
-                Text(filme.sinopse.isEmpty ? 'Sem sinopse disponível.' : filme.sinopse),
-                const Divider(height: 32),
-                const Text('Sua avaliação'),
-                Row(
-                  children: [
-                    for (var n = 1; n <= 5; n++)
-                      IconButton(
-                        onPressed: () => _salvar(nota: n),
-                        icon: Icon(
-                          (_usuario?.nota ?? 0) >= n ? Icons.star : Icons.star_border,
-                          color: Colors.amber,
-                        ),
-                      ),
-                  ],
-                ),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    FilledButton.tonalIcon(
-                      onPressed: () => _salvar(favorito: !(_usuario?.favorito ?? false)),
-                      icon: Icon((_usuario?.favorito ?? false)
-                          ? Icons.favorite
-                          : Icons.favorite_border),
-                      label: Text((_usuario?.favorito ?? false)
-                          ? 'Favoritado'
-                          : 'Favoritar'),
+                Card(
+                  color: cores.surfaceContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(filme.titulo, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: cores.primary)),
+                        Text('${filme.ano} · TMDB ${filme.notaMedia.toStringAsFixed(1)}', style: TextStyle(color: cores.onSurfaceVariant)),
+                        const SizedBox(height: 12),
+                        Text(filme.sinopse.isEmpty ? 'Sem sinopse disponível.' : filme.sinopse, style: TextStyle(color: cores.onSurface)),
+                      ],
                     ),
-                    if (_usuario != null)
-                      TextButton(onPressed: _remover, child: const Text('Remover da lista')),
-                  ],
+                  ),
                 ),
+                SizedBox(height: 20),
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 14.0), 
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Sua avaliação',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: cores.primary,
+        ),
+      ),
+      const SizedBox(height: 8),
+
+      // Linha das Estrelas
+      Row(
+        children: [
+          for (var n = 1; n <= 5; n++)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0), // Espaço entre as estrelas
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                visualDensity: VisualDensity.compact,
+                onPressed: () => _salvar(nota: n),
+                icon: Icon(
+                  (_usuario?.nota ?? 0) >= n ? Icons.star : Icons.star_border,
+                  color: cores.secondary,
+                  size: 28,
+                ),
+              ),
+            ),
+        ],
+      ),
+
+      const SizedBox(height: 12),
+
+      // Botões
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          FilledButton.tonalIcon(
+            style: FilledButton.styleFrom(
+              backgroundColor: cores.primary,
+              foregroundColor: cores.onPrimary,
+            ),
+            onPressed: () => _salvar(favorito: !(_usuario?.favorito ?? false)),
+            icon: Icon(
+              (_usuario?.favorito ?? false)
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+            ),
+            label: Text(
+              (_usuario?.favorito ?? false) ? 'Favoritado' : 'Favoritar',
+            ),
+          ),
+          if (_usuario != null)
+            TextButton(
+              onPressed: _remover,
+              child: Text(
+                'Remover da lista',
+                style: TextStyle(color: cores.onSurfaceVariant),
+              ),
+            ),
+        ],
+      ),
+    ],
+  ),
+),
               ] else if (!_ocupado && _erro != null)
                 OutlinedButton(onPressed: _carregar, child: const Text('Tentar novamente')),
             ],
