@@ -4,6 +4,8 @@ import 'package:recomendacao_filme/service/filme_usuario_service.dart';
 import 'package:recomendacao_filme/telas/tela_detalhes_filme.dart';
 import 'package:recomendacao_filme/widgets/filme_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:recomendacao_filme/style/colorScheme.dart' as custom_colors;
+
 
 class TelaMinhaLista extends StatefulWidget {
   const TelaMinhaLista({super.key});
@@ -18,32 +20,42 @@ class _TelaMinhaListaState extends State<TelaMinhaLista> {
 
   @override
   Widget build(BuildContext context) {
+       final cores = custom_colors.colorScheme;
+
     return StreamBuilder<List<FilmeUsuario>>(
       stream: _stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text('Erro ao carregar: ${snapshot.error}'));
+          return Center(child: Text(
+            'Erro ao carregar: ${snapshot.error}',
+             style: TextStyle(color: cores.error)
+          ),);
         }
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
         final filmes = snapshot.data!;
         if (filmes.isEmpty) {
-          return const Center(child: Text('Você ainda não avaliou nenhum filme'));
+          return Center(child: Text('Você ainda não avaliou nenhum filme', style: TextStyle(color: cores.onSurfaceVariant),),);
         }
         return ListView.builder(
           itemCount: filmes.length,
           itemBuilder: (context, i) {
             final f = filmes[i];
             return ListTile(
+              tileColor: cores.surfaceContainer,
               leading: SizedBox(
                 width: 48,
                 child: Poster(url: ApiConfig.urlPoster(f.posterPath)),
               ),
-              title: Text(f.titulo),
-              subtitle: Text(f.nota == null ? 'Sem nota' : '★' * f.nota!),
+              title: Text(f.titulo,
+              style: TextStyle(color: cores.onSurface),
+              ),
+              subtitle: Text(f.nota == null ? 'Sem nota' : '★' * f.nota!,
+              style: TextStyle(color: cores.onSurfaceVariant),
+              ),
               trailing: f.favorito
-                  ? const Icon(Icons.favorite, color: Colors.red)
+                  ? Icon(Icons.favorite, color: cores.secondary)
                   : null,
               onTap: () => Navigator.push(
                 context,
